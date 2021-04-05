@@ -77,7 +77,7 @@ while True:
                                state[(x + 1) % nxC, y % nyC] + \
                                state[(x - 1) % nxC, (y + 1) % nyC] + \
                                state[x % nxC, (y + 1) % nyC] + \
-                               state[(x - 1) % nxC, (y + 1) % nyC]
+                               state[(x + 1) % nxC, (y + 1) % nyC]
 
                 # Rule 1: Died cell with 3 alive neighbours -> Live cell
                 if state[x, y] == 0 and n_neighbours == 3:
