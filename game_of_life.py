@@ -17,7 +17,14 @@ nxC, nyC = 25, 25
 dimCW = width / nxC
 dimCH = height / nyC
 
+# State of the cells
+# Live = 1
+# Dead = 0
+state = np.zeros((nxC, nyC))
+
+# Execution loop
 while True:
+    new_state = np.copy(state)
 
     for x in range(0, nxC):
         for y in range(0, nyC):
@@ -28,6 +35,24 @@ while True:
                 ((x + 1) * dimCW, (y + 1) * dimCH),
                 (x * dimCW, (y + 1) * dimCH)
             ]
+
+            # How many closed neighbours has the cell
+            n_neighbours = state[(x - 1) % nxC, (y - 1) % nyC] + \
+                           state[x % nxC, (y - 1) % nyC] + \
+                           state[(x + 1) % nxC, (y - 1) % nyC] + \
+                           state[(x - 1) % nxC, y % nyC] + \
+                           state[(x + 1) % nxC, y % nyC] + \
+                           state[(x - 1) % nxC, (y + 1) % nyC] + \
+                           state[x % nxC, (y + 1) % nyC] + \
+                           state[(x - 1) % nxC, (y + 1) % nyC]
+
+            # Rule 1: Died cell with 3 alive neighbours -> Live cell
+            if state[x, y] == 0 and n_neighbours == 3:
+                new_state[x, y] = 1
+
+            # Rule 2: Live cell with less than 2 or more than 3 alive neighbours -> Died cell
+            elif state[x, y] == 1 and (n_neighbours < 2 or n_neighbours > 3):
+                new_state[x, y] = 0
 
             pygame.draw.polygon(screen, (128, 128, 128), poly, width=1)
 
