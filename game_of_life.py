@@ -22,12 +22,26 @@ dimCH = height / nyC
 # Dead = 0
 state = np.zeros((nxC, nyC))
 
+# Examples
+# Stick
+state[5, 3] = 1
+state[5, 4] = 1
+state[5, 5] = 1
+
+# Movable
+# state[21, 21] = 1
+# state[22, 22] = 1
+# state[22, 23] = 1
+# state[21, 23] = 1
+# state[20, 23] = 1
+
 # Execution loop
 while True:
     new_state = np.copy(state)
+    screen.fill(bg)
 
-    for x in range(0, nxC):
-        for y in range(0, nyC):
+    for y in range(0, nxC):
+        for x in range(0, nyC):
             # Create the polygon to draw
             poly = [
                 (x * dimCW, y * dimCH),
@@ -59,5 +73,8 @@ while True:
                 pygame.draw.polygon(screen, (128, 128, 128), poly, width=1)
             else:
                 pygame.draw.polygon(screen, (255, 255, 255), poly, width=0)
+
+    # Update state
+    state = np.copy(new_state)
 
     pygame.display.flip()
