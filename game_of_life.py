@@ -46,7 +46,8 @@ while True:
     time.sleep(0.1)
 
     # Register keyboard and mouse events
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         # Detect any key clicked
         if event.type == pygame.KEYDOWN:
             pause_exec = not pause_exec
