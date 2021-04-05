@@ -1,5 +1,6 @@
 import pygame
 import numpy as np
+import time
 
 pygame.init()
 
@@ -38,7 +39,9 @@ state[5, 5] = 1
 # Execution loop
 while True:
     new_state = np.copy(state)
+
     screen.fill(bg)
+    time.sleep(0.1)
 
     for y in range(0, nxC):
         for x in range(0, nyC):
