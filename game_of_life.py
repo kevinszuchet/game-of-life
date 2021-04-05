@@ -70,6 +70,7 @@ while True:
 
             if not pause_exec:
                 # How many closed neighbours has the cell
+                # The mod operation is the implementation of the toroidal strategy
                 n_neighbours = state[(x - 1) % nxC, (y - 1) % nyC] + \
                                state[x % nxC, (y - 1) % nyC] + \
                                state[(x + 1) % nxC, (y - 1) % nyC] + \
