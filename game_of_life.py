@@ -54,6 +54,10 @@ while True:
             elif state[x, y] == 1 and (n_neighbours < 2 or n_neighbours > 3):
                 new_state[x, y] = 0
 
-            pygame.draw.polygon(screen, (128, 128, 128), poly, width=1)
+            # Draw the new cell for each (x, y)
+            if new_state[x, y] == 0:
+                pygame.draw.polygon(screen, (128, 128, 128), poly, width=1)
+            else:
+                pygame.draw.polygon(screen, (255, 255, 255), poly, width=0)
 
     pygame.display.flip()
