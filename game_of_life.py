@@ -30,11 +30,13 @@ state[5, 4] = 1
 state[5, 5] = 1
 
 # Movable
-# state[21, 21] = 1
-# state[22, 22] = 1
-# state[22, 23] = 1
-# state[21, 23] = 1
-# state[20, 23] = 1
+state[21, 21] = 1
+state[22, 22] = 1
+state[22, 23] = 1
+state[21, 23] = 1
+state[20, 23] = 1
+
+pause_exec = False
 
 # Execution loop
 while True:
@@ -42,6 +44,19 @@ while True:
 
     screen.fill(bg)
     time.sleep(0.1)
+
+    # Register keyboard and mouse events
+    for event in pygame.event.get():
+        # Detect any key clicked
+        if event.type == pygame.KEYDOWN:
+            pause_exec = not pause_exec
+
+        # Detect a click on the mouse
+        mouse_click = pygame.mouse.get_pressed()
+        if sum(mouse_click) > 0:
+            posX, posY = pygame.mouse.get_pos()
+            celX, celY = int(np.floor(posX / dimCW)), int(np.floor(posY / dimCH))
+            state[celX, celY] = not mouse_click[2]
 
     for y in range(0, nxC):
         for x in range(0, nyC):
@@ -53,23 +68,24 @@ while True:
                 (x * dimCW, (y + 1) * dimCH)
             ]
 
-            # How many closed neighbours has the cell
-            n_neighbours = state[(x - 1) % nxC, (y - 1) % nyC] + \
-                           state[x % nxC, (y - 1) % nyC] + \
-                           state[(x + 1) % nxC, (y - 1) % nyC] + \
-                           state[(x - 1) % nxC, y % nyC] + \
-                           state[(x + 1) % nxC, y % nyC] + \
-                           state[(x - 1) % nxC, (y + 1) % nyC] + \
-                           state[x % nxC, (y + 1) % nyC] + \
-                           state[(x - 1) % nxC, (y + 1) % nyC]
+            if not pause_exec:
+                # How many closed neighbours has the cell
+                n_neighbours = state[(x - 1) % nxC, (y - 1) % nyC] + \
+                               state[x % nxC, (y - 1) % nyC] + \
+                               state[(x + 1) % nxC, (y - 1) % nyC] + \
+                               state[(x - 1) % nxC, y % nyC] + \
+                               state[(x + 1) % nxC, y % nyC] + \
+                               state[(x - 1) % nxC, (y + 1) % nyC] + \
+                               state[x % nxC, (y + 1) % nyC] + \
+                               state[(x - 1) % nxC, (y + 1) % nyC]
 
-            # Rule 1: Died cell with 3 alive neighbours -> Live cell
-            if state[x, y] == 0 and n_neighbours == 3:
-                new_state[x, y] = 1
+                # Rule 1: Died cell with 3 alive neighbours -> Live cell
+                if state[x, y] == 0 and n_neighbours == 3:
+                    new_state[x, y] = 1
 
-            # Rule 2: Live cell with less than 2 or more than 3 alive neighbours -> Died cell
-            elif state[x, y] == 1 and (n_neighbours < 2 or n_neighbours > 3):
-                new_state[x, y] = 0
+                # Rule 2: Live cell with less than 2 or more than 3 alive neighbours -> Died cell
+                elif state[x, y] == 1 and (n_neighbours < 2 or n_neighbours > 3):
+                    new_state[x, y] = 0
 
             # Draw the new cell for each (x, y)
             if new_state[x, y] == 0:
